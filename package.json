@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "knip": "npx knip",
+    "knip:md": "knip --reporter markdown"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.7",
+    "knip": "^5.42.2",
+    "typescript": "^5.7.3"
+  }
+}

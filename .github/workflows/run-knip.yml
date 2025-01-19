@@ -1,0 +1,49 @@
+name: run-knip
+
+on:
+  workflow_dispatch:
+    inputs:
+      manual_run:
+        # 手動実行のみ実行させる
+        description: "Manual run flag"
+        required: false
+        default: "true"
+
+jobs:
+  knip:
+    runs-on: Linux-2-core-ARM
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      # node_modulesのキャッシュ検索
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        id: node_modules_cache
+        with:
+          path: "./node_modules"
+          key: ${{ runner.os }}-${{ runner.arch}}-node_modules-${{ hashFiles('./package-lock.json') }}
+
+      # node_modulesのキャッシュ無ければインストール
+      - name: Npm Install
+        if: steps.node_modules_cache.outputs.cache-hit != 'true'
+        run: npm ci
+
+      # knip実行
+      - name: Run Knip
+        id: knip
+        run: npm run knip:md
+        continue-on-error: true
+
+      # knip実行結果を出力
+      - name: Output Result Knip
+        run: |
+          echo "::warning::Unused code detected in the project"
