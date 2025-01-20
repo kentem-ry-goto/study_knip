@@ -41,7 +41,6 @@ jobs:
       - name: Run Knip
         id: knip
         run: npm run knip:md
-        continue-on-error: true
 
       # knip実行結果を出力
       - name: Output Failure Knip
