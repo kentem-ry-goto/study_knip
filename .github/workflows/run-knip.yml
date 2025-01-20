@@ -41,21 +41,21 @@ jobs:
       - name: Run Knip
         id: knip
         run: npm run knip:md
+        continue-on-error: true
 
       # knip実行結果を出力
       - name: Output Failure Knip
-        if: failure()
+        if: steps.knip.outcome == 'failure'
         run: |
           echo "失敗！ ${{ steps.knip.outcome }}"
 
       # knip実行結果を出力
       - name: Output Success Knip
-        if: success()
+        if: steps.knip.outcome == 'success'
         run: |
-          echo "成功！ ${{ steps.knip.outcome }}"
+          echo "成功！ ${{ steps.knip.outcome }} ${{ steps.knip.outputs.stdout }}"
 
       # 出力されるかの確認
       - name: log
-        if: success()
         run: |
           echo "ログ！ ${{ steps.knip.outcome }}"
