@@ -52,11 +52,9 @@ jobs:
           script: |
             const fs = require('fs');
             const knip_report = fs.readFileSync('knip-report', 'utf8')
-            let commentBody = 'Knipにより検出されました👀\n';
-            console.log(knip_report)
+            let header = 'Knipにより検出されました👀\n未使用のファイル、依存関係、exportがある場合は修正してください\n';
+            console.log(`${header}${knip_report}`)
 
-      # knip実行結果を出力
-      - name: Output Success Knip
-        if: steps.knip.outcome == 'success'
-        run: |
-          echo "成功！ ${{ steps.knip.outcome }} ${{ steps.knip.outputs.stdout }}"
+      # 一時的に作成したKnip結果ファイルを削除
+      - name: Remove Knip Report
+        run: rm knip-report
