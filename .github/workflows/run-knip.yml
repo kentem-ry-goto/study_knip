@@ -40,30 +40,21 @@ jobs:
       # knip実行
       - name: Run Knip
         id: knip
-        run: npm run knip:md > knip-report.json
+        run: npm run knip:md > knip-report
         continue-on-error: true
 
       # knip実行結果を出力
       - name: Output Failure Knip
         uses: actions/github-script@v7
         if: steps.knip.outcome == 'failure'
-        env:
-          KNIP_REPORT: knip-report.json
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
             echo "失敗！ ${{ steps.knip.outcome }} ${{ steps.knip.outputs.stdout }}"
             const fs = require('fs');
-            const reportPath = process.env.KNIP_REPORT;
+            const knip_report = fs.readFileSync('/knip-report', 'utf8')
             let commentBody = 'Knipにより検出されました👀\n';
-            const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
-            for (const [key, value] of Object.entries(report)) {
-              commentBody += `### ${key}\n`;
-              value.forEach(item => {
-                commentBody += `${item.message}\n`;
-              });
-            }
-            console.log(commentBody)
+            console.log(knip_report)
 
       # knip実行結果を出力
       - name: Output Success Knip
