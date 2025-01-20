@@ -50,11 +50,9 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            echo "失敗！ ${{ steps.knip.outcome }} ${{ steps.knip.outputs.stdout }}"
             const fs = require('fs');
             const knip_report = fs.readFileSync('/knip-report', 'utf8')
             let commentBody = 'Knipにより検出されました👀\n';
-            console.log(knip_report)
 
       # knip実行結果を出力
       - name: Output Success Knip
