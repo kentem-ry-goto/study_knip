@@ -44,6 +44,13 @@ jobs:
         continue-on-error: true
 
       # knip実行結果を出力
-      - name: Output Result Knip
+      - name: Output Failure Knip
+        if: failure()
         run: |
-          echo "::warning::Unused code detected in the project"
+          echo "失敗！"
+
+      # knip実行結果を出力
+      - name: Output Success Knip
+        if: success()
+        run: |
+          echo "成功！"
