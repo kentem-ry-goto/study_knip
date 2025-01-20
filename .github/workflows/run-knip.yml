@@ -44,7 +44,7 @@ jobs:
 
       # knip実行結果を出力
       - name: Output Failure Knip
-        if: steps.knip.outcome == 'failure'
+        if: failure()
         run: |
           echo "失敗！ ${{ steps.knip.outcome }}"
 
@@ -53,3 +53,9 @@ jobs:
         if: success()
         run: |
           echo "成功！ ${{ steps.knip.outcome }}"
+
+      # 出力されるかの確認
+      - name: log
+        if: success()
+        run: |
+          echo "ログ！ ${{ steps.knip.outcome }}"
