@@ -40,7 +40,7 @@ jobs:
       # knip実行
       - name: Run Knip
         id: knip
-        run: npm run knip:md > knip-report
+        run: npx knip --reporter markdown > knip-report
         continue-on-error: true
 
       # knip実行結果を出力
